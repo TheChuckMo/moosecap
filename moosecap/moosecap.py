@@ -1,5 +1,5 @@
 from flask import Flask
-from moosecap.db.models import *
+from moosecap.db.model import *
 
 
 app = Flask(__name__)
