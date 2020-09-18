@@ -1,3 +1,5 @@
+moosecap.db
+*.db
 *.log
 *.pyc
 .DS_Store
