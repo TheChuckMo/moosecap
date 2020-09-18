@@ -1,0 +1,1 @@
+"""Moose Capacity data models"""

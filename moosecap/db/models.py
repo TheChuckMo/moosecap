@@ -6,7 +6,6 @@ db = Database()
 
 
 class Object(db.Entity):
-    # id = PrimaryKey(int, auto=True)
     bat = Required(str, max_len=10, unique=True, index=True)
     name = Required(str, max_len=120, unique=True, index=True)
     owner = Optional(lambda: Person, cascade_delete=False)
@@ -23,7 +22,6 @@ class Technology(Object):
 
 
 class Person(db.Entity):
-    # id = PrimaryKey(int, auto=True, unsigned=True)
     bat = Required(str, max_len=10, unique=True, index=True)
     name = Required(str, unique=True, max_len=120)
     email = Optional(str, unique=True, max_len=120)
