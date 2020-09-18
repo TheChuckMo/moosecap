@@ -1,0 +1,11 @@
+Metadata-Version: 1.2
+Name: moosecap
+Version: 0.1.0
+Summary: MooseJudge Capacity Model
+Home-page: UNKNOWN
+Author: Chuck Mo
+Author-email: chuck@moosejudge.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.8,<4.0

@@ -1,0 +1,8 @@
+README.md
+moosecap.py
+setup.py
+moosecap.egg-info/PKG-INFO
+moosecap.egg-info/SOURCES.txt
+moosecap.egg-info/dependency_links.txt
+moosecap.egg-info/requires.txt
+moosecap.egg-info/top_level.txt
