@@ -8,11 +8,14 @@ authors = ["Chuck Mo <chuck@moosejudge.com>"]
 python = "^3.8"
 flask = "^1.1.2"
 pony = "^0.7.13"
-pip = "^20.2.3"
+python-dotenv = "^0.14.0"
+flask-login = "^0.5.0"
+flask-marshmallow = "^0.13.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0.2"
 mkdocs = "^1.1.2"
+pytest-cov = "^2.10.1"
 
 [tool.poetry.scripts]
 modb = 'moosecap.db.console:modb'

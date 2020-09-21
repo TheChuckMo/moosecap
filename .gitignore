@@ -1,4 +1,5 @@
 moosecap.db
+.env*
 *.db
 *.log
 *.pyc

@@ -1,0 +1,3 @@
+[console_scripts]
+modb = moosecap.db.console:modb
+

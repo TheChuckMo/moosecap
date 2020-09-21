@@ -5,7 +5,9 @@ moosecap/moosecap.py
 moosecap.egg-info/PKG-INFO
 moosecap.egg-info/SOURCES.txt
 moosecap.egg-info/dependency_links.txt
+moosecap.egg-info/entry_points.txt
 moosecap.egg-info/requires.txt
 moosecap.egg-info/top_level.txt
 moosecap/db/__init__.py
-moosecap/db/models.py
+moosecap/db/console.py
+moosecap/db/model.py
