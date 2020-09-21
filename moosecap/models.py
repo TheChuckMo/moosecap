@@ -2,18 +2,8 @@
 
 from decimal import Decimal
 from pony.orm import *
-from pony.flask import Pony
-
 
 db = Database()
-
-
-def db_bind(connect: str, create_tables: bool = False):
-    """Bind to database."""
-    db.bind('sqlite', connect, create_db=True)
-    db.generate_mapping(create_tables=create_tables)
-
-    return db
 
 
 class Object(db.Entity):

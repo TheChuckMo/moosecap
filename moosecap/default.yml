@@ -1,0 +1,101 @@
+---
+organization:
+  - bat: aellc
+    name: An Example LLC
+category:
+  - name: Business Projects
+    bat: busp
+  - name: Team Projects
+    bat: intp
+  - name: Operational Support
+    bat: opsup
+  - name: Operational Maintenance
+    bat: opmain
+domain:
+  - bat: custsupport
+    name: Customer Support
+    organization: { bat: aellc }
+  - bat: shared
+    name: Shared Services
+    organization: { bat: aellc }
+  - bat: busapp
+    name: Internal Business App
+    organization: { bat: aellc }
+  - bat: custservice
+    name: Customer Service Delivery
+    organization: { bat: aellc }
+team:
+  - bat: infrateam
+    name: Infrastructure Team
+    organization: { bat: aellc }
+person:
+  - bat: swansonr
+    name: Ron Swanson
+  - bat: henrys
+    name: Sam Henry
+  - bat: smiths
+    name: Betty Smith
+  - bat: hankst
+    name: Tom Hanks
+  - bat: winners
+    name: Sue Winner
+  - bat: twotonet
+    name: Timmy Twotone
+technology:
+  - bat: ucompute
+    name: Unix Compute
+    reliability: 0.95555
+    tier: 1
+  - bat: wcompute
+    name: Windows Compute
+    reliability: 0.95555
+    tier: 1
+  - bat: edirectory
+    name: Enterprise Directory
+    reliability: 0.95555
+    tier: 1
+  - bat: email
+    name: Enterprise Mail
+    reliability: 0.95555
+    tier: 1
+  - bat: strnbck
+    name: Storage and Backups
+    reliability: 0.95555
+    tier: 1
+  - bat: devops
+    name: DevOps Automation
+    reliability: 0.95555
+    tier: 1
+system:
+  - bat: sysone
+    name: System One
+    tier: 1
+    domain: { bat: shared }
+    team: { bat: infrateam }
+  - bat: systwo
+    name: System Two
+    tier: 1
+    domain: { bat: custacct }
+    team: { bat: infrateam }
+    system_dependencies: [{ bat: sysone }]
+technology_dependency:
+  - system: { bat: sysone }
+    technology: { bat: devops }
+    weight: 1
+technology_skill:
+  - technology: { bat: devops }
+    person: { bat: swansonr }
+    level: 1
+category_allocation:
+  - team: { bat: infrateam }
+    category: { bat: busp }
+    ratio: 0.25
+  - team: { bat: infrateam }
+    category: { bat: intp }
+    ratio: 0.25
+  - team: { bat: infrateam }
+    category: { bat: opsup }
+    ratio: 0.25
+  - team: { bat: infrateam }
+    category: { bat: opmain }
+    ratio: 0.25

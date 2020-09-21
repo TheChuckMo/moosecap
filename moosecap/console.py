@@ -1,10 +1,30 @@
-from moosecap.db import db_session
-from moosecap.models import db_bind
+from moosecap.models_two import db_bind, db_session
 import os
+import yaml
 import click
 
 DB_NAME = 'moosecap.db'
 DB_CONNECT = os.path.join(os.path.abspath(os.getcwd()), DB_NAME)
+
+_data: dict = {}
+_default_data_file_ = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'default.yml')
+
+if os.path.exists(_default_data_file_):
+    with open(_default_data_file_, 'r') as fd:
+        _data = yaml.safe_load(fd)
+
+
+def load_entity(name: str, Entity, entries: list):
+    """Load Entity data."""
+    click.echo(f'{name} defaults')
+
+    with db_session:
+        for _entry in entries:
+            if Entity.get(bat=_entry["bat"]):
+                click.echo(f'skipping {_entry["bat"]}')
+            else:
+                click.echo(f'writing {_entry["bat"]}')
+                Entity(**_entry)
 
 
 @click.group('modb')
@@ -27,69 +47,105 @@ def create():
     db_bind(DB_CONNECT, create_tables=True)
 
 
-@modb.command()
+@modb.group('load')
+def load_db():
+    """Load entity sample data."""
+    pass
+
+
+@load_db.command()
 @click.confirmation_option()
-def load_base():
-    """Load default data."""
+def org():
+    """Sample organization."""
     db = db_bind(DB_CONNECT)
+
+    click.echo('loading organization')
+    load_entity("organization", db.Organization, _data.get("organization"))
+
+
+@load_db.command()
+@click.confirmation_option()
+def category():
+    """Sample category entities."""
+    db = db_bind(DB_CONNECT)
+
+    click.echo('loading category')
+    load_entity("category", db.Category, _data.get("category"))
+
+
+@load_db.command()
+@click.confirmation_option()
+def domain():
+    """Sample domain entities."""
+    db = db_bind(DB_CONNECT)
+
     click.echo('writing domain')
     with db_session:
-        db.Domain(name="Business Projects", bat="busp", enabled=True)
-        db.Domain(name="Team Projects", bat="intp", enabled=True)
-        db.Domain(name="Operational Support", bat="opsup", enabled=True)
-        db.Domain(name="Operational Maintenance", bat="opmain", enabled=True)
+        _entries = []
+        for _entry in _data.get("domain"):
+            click.echo(f'getting org {_entry["organization"]["bat"]}')
+            _entry["organization"] = db.Organization.get(bat=f'{_entry["organization"]["bat"]}')
+            _entries.append(_entry)
 
-    click.echo('writing technology')
-    with db_session:
-        db.Technology(name="Unix Compute", bat="ucompute", enabled=True)
-        db.Technology(name="Windows Compute", bat="wcompute", enabled=True)
-        db.Technology(name="Enterprise Directory", bat="edirectory", enabled=True)
-        db.Technology(name="Enterprise Mail", bat="email", enabled=True)
-        db.Technology(name="Storage and Backups", bat="strnbck", enabled=True)
-        db.Technology(name="DevOps Automation", bat="devops", enabled=True)
+        load_entity("domain", db.Domain, _entries)
+
+
+@load_db.command()
+@click.confirmation_option()
+def team():
+    """Sample team entities."""
+    db = db_bind(DB_CONNECT)
 
     click.echo('writing team')
     with db_session:
-        team = db.Team(name="Infrastructure Team", bat="infrateam", enabled=True)
+        _entries = []
+        for _entry in _data.get("team"):
+            click.echo(f'getting org {_entry["organization"]["bat"]}')
+            _entry["organization"] = db.Organization.get(bat=f'{_entry["organization"]["bat"]}')
+            _entries.append(_entry)
 
-        click.echo('writing coordinator')
-        db.Coordinator(name="Ron Swanson", bat="swansonr", rate=1, coordinate=team)
+        load_entity("team", db.Team, _entries)
 
-        click.echo('writing contributor')
-        db.Contributor(name="Sam Henry", bat="henrys", rate=1, member=team)
-        db.Contributor(name="Betty Smith", bat="smiths", rate=1, member=team)
-        db.Contributor(name="Tom Hanks", bat="hankst", rate=0.5, member=team)
-        db.Contributor(name="Sue Winner", bat="winners", rate=0.75, member=team)
-        db.Contributor(name="Timmy Twotone", bat="twotonet", rate=1, member=team)
 
-    click.echo('writing contributor_technology')
+@load_db.command()
+@click.confirmation_option()
+def allocation():
+    """Sample category allocation."""
+    db = db_bind(DB_CONNECT)
+
+    click.echo('team category allocation')
     with db_session:
-        click.echo('get contributors')
-        contrib1 = db.Contributor.get(bat="henrys")
-        contrib2 = db.Contributor.get(bat="smiths")
-        contrib3 = db.Contributor.get(bat="hankst")
-        contrib4 = db.Contributor.get(bat="winners")
-        contrib5 = db.Contributor.get(bat="twotonet")
+        _entries = []
+        for _entry in _data.get("category_allocation"):
+            click.echo(f'getting team {_entry["team"]["bat"]}')
+            _entry["team"] = db.Team.get(bat=f'{_entry["team"]["bat"]}')
 
-        click.echo('get technologies')
-        tech1 = db.Technology.get(bat="ucompute")
-        tech2 = db.Technology.get(bat="wcompute")
-        tech3 = db.Technology.get(bat="edirectory")
-        tech4 = db.Technology.get(bat="email")
-        tech5 = db.Technology.get(bat="strnbck")
-        tech6 = db.Technology.get(bat="devops")
+            click.echo(f'getting category {_entry["category"]["bat"]}')
+            _entry["category"] = db.Category.get(bat=f'{_entry["category"]["bat"]}')
 
-        click.echo('writing contributor technologies')
-        db.Contributor_Technology(contributor=contrib1, technology=tech1, factor=1)
-        db.Contributor_Technology(contributor=contrib1, technology=tech4, factor=1)
-        db.Contributor_Technology(contributor=contrib1, technology=tech6, factor=1)
-        db.Contributor_Technology(contributor=contrib2, technology=tech2, factor=1)
-        db.Contributor_Technology(contributor=contrib2, technology=tech3, factor=1)
-        db.Contributor_Technology(contributor=contrib2, technology=tech5, factor=1)
-        db.Contributor_Technology(contributor=contrib3, technology=tech2, factor=1)
-        db.Contributor_Technology(contributor=contrib3, technology=tech3, factor=1)
-        db.Contributor_Technology(contributor=contrib3, technology=tech4, factor=1)
-        db.Contributor_Technology(contributor=contrib4, technology=tech5, factor=1)
-        db.Contributor_Technology(contributor=contrib4, technology=tech3, factor=1)
-        db.Contributor_Technology(contributor=contrib5, technology=tech3, factor=1)
-        db.Contributor_Technology(contributor=contrib5, technology=tech6, factor=1)
+            if db.Category_Allocation.get(**_entry):
+                click.echo(f'skipping {_entry["category"].name}')
+            else:
+                click.echo(f'writing {_entry["category"].name}')
+                db.Category_Allocation(**_entry)
+
+
+@load_db.command()
+@click.confirmation_option()
+def technology():
+    """Sample technology entities."""
+    db = db_bind(DB_CONNECT)
+
+    click.echo('writing technology')
+    load_entity("technology", db.Technology, _data.get("technology"))
+
+
+@load_db.command()
+@click.confirmation_option()
+def person():
+    """Sample person entities."""
+    db = db_bind(DB_CONNECT)
+
+    click.echo('writing person')
+    load_entity("person", db.Person, _data.get("person"))
+

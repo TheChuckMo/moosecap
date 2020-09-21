@@ -11,3 +11,4 @@ markdown_extensions:
   - toc:
       permalink: True
   - sane_lists
+  - def_list
