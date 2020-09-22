@@ -1,4 +1,4 @@
-moosecap.db
+moosecap.db*
 .env*
 *.db
 *.log
