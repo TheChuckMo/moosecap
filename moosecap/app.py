@@ -25,6 +25,14 @@ class User(db.Entity, UserMixin):
 db.bind(**app.config['PONY'])
 db.generate_mapping(create_tables=True)
 
+def create_app():
+    app = Flask(__name__)
+
+    with app.app_context():
+        init_db()
+
+    return app
+
 Pony(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'

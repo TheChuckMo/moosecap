@@ -1,4 +1,4 @@
-from moosecap.models_two import db_bind, db_session
+from moosecap.models import db_bind, db_session
 import os
 import yaml
 import click
