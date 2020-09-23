@@ -1,123 +1,97 @@
-from decimal import Decimal
-from pony.orm import *
-from pony.flask import Pony, db_session
+from sqlalchemy import Sequence, Column, String, Integer, ForeignKey, Numeric, Text, JSON
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 
-db = Database()
-
-
-def db_init_app(app):
-    """Init Pony in Flask app."""
-    Pony(app)
+Base = declarative_base()
 
 
-def db_bind(connect: str, create_tables: bool = False):
-    """Bind to database."""
-    # TODO: this only works for sqlite
-    db.bind('sqlite', connect, create_db=True)
-    db.generate_mapping(create_tables=create_tables)
+class Organization(Base):
+    """Organization."""
+    __tablename__ = 'organizations'
+    id = Column(Integer, primary_key=True)
+    bat = Column(String(30), unique=True, index=True)
+    name = Column(String(120), unique=True)
+    display = Column(String(220))
+    work_unit_name = Column(String(30))
+    work_unit_per_week = Column(Integer)
+    work_unit_admin_ratio = Column(Numeric(precision=3, scale=2))
+    note = Column(Text(520))
+    extra = Column(JSON)
+    domains = relationship("Domain", backref="organization")
+    people = relationship("Person", backref="organization")
+    teams = relationship("Team", backref="organization")
+    categories = relationship("Category", backref="organization")
 
-    return db
-
-
-class Person(db.Entity):
-    bat = PrimaryKey(str, 30)
-    name = Required(str)
-    display = Optional(str)
-    email = Optional(str)
-    manage = Optional('Team', reverse='manager')
-    team = Optional('Team', reverse='members')
-    work_unit_ratio = Optional(str)
-    note = Optional(str)
-    extra = Optional(Json)
-    technology_skills = Set('Technology_Skill')
-
-
-class Organization(db.Entity):
-    bat = PrimaryKey(str, 30)
-    name = Required(str, 220)
-    display = Optional(str)
-    note = Optional(str)
-    domains = Set('Domain')
-    work_unit_name = Required(str, default='hour')
-    work_unit_per_week = Required(int, default=40)
-    work_unit_admin_ratio = Required(Decimal, precision=3, scale=2, default="0.20")
-    teams = Set('Team')
-    extra = Optional(Json)
+    def __repr__(self):
+        return "<id(id='%s', bat='%s', name='%s')>" % (self.id, self.bat, self.name)
 
 
-class Team(db.Entity):
-    bat = PrimaryKey(str, 30)
-    name = Required(str)
-    organization = Required(Organization)
-    display = Optional(str)
-    note = Optional(str)
-    domains = Set('Domain')
-    extra = Optional(Json)
-    systems = Set('System')
-    categories = Set('Category_Allocation')
-    manager = Optional(Person, reverse='manage')
-    members = Set(Person, reverse='team')
+class Team(Base):
+    """Team."""
+    __tablename__ = 'teams'
+    id = Column(Integer, primary_key=True)
+    bat = Column(String(30), unique=True, index=True)
+    name = Column(String(120), unique=True)
+    display = Column(String(220))
+    note = Column(Text(520))
+    extra = Column(JSON)
+    organization_id = Column(Integer, ForeignKey='organization.id')
+    #domains = Set('Domain')
+    #systems = Set('System')
+    #categories = Set('Category_Allocation')
+    #manager = Column(Person, reverse='manage')
+    #members = Set(Person, reverse='team')
+
+    def __repr__(self):
+        return "<id(id='%s', bat='%s', name='%s')>" % (self.id, self.bat, self.name)
 
 
-class Category(db.Entity):
-    bat = PrimaryKey(str, 30)
-    name = Required(str)
-    display = Optional(str)
-    teams = Set('Category_Allocation')
-    note = Optional(str)
-    extra = Optional(Json)
+class Category(Base):
+    """Category."""
+    __tablename__ = 'categories'
+    id = Column(Integer, primary_key=True)
+    bat = Column(String(30), unique=True, index=True)
+    name = Column(String(120), unique=True)
+    display = Column(String(220))
+    note = Column(Text(520))
+    extra = Column(JSON)
+    organization_id = Column(Integer, ForeignKey='organization.id')
+    #teams = Set('Category_Allocation')
+
+    def __repr__(self):
+        return "<id(id='%s', bat='%s', name='%s')>" % (self.id, self.bat, self.name)
 
 
-class Domain(db.Entity):
-    bat = PrimaryKey(str, 30)
-    name = Required(str)
-    organization = Required(Organization)
-    display = Optional(str)
-    note = Optional(str)
-    teams = Set(Team)
-    systems = Set('System')
-    extra = Optional(Json)
+class Person(Base):
+    """Person."""
+    __tablename__ = 'people'
+    id = Column(Integer, primary_key=True)
+    bat = Column(String(30), unique=True, index=True)
+    name = Column(String(120), unique=True)
+    display = Column(String(220))
+    email = Column(String(220))
+    work_unit_ratio = Column(Numeric(precision=3, scale=2))
+    note = Column(Text(520))
+    extra = Column(JSON)
+    organization_id = Column(Integer, ForeignKey='organization.id')
+    #manage = Column('Team', reverse='manager')
+    #team = Column('Team', reverse='members')
+    #technology_skills = Set('Technology_Skill')
+
+    def __repr__(self):
+        return "<id(id='%s', bat='%s', name='%s')>" % (self.id, self.bat, self.name)
 
 
-class Object(db.Entity):
-    bat = PrimaryKey(str, 30)
-    name = Required(str)
-    display = Optional(str)
-    note = Optional(str)
-    reliability = Optional(Decimal, precision=6, scale=5, default="0.95555")
-    tier = Optional(int, default=1)
-    extra = Optional(Json)
-
-
-class Technology(Object):
-    dependencies = Set('Technology_Dependency')
-    people = Set('Technology_Skill')
-
-
-class System(Object):
-    domain = Optional(Domain)
-    team = Optional(Team)
-    system_dependencies = Set('System', reverse='system_dependencies')
-    technology_dependencies = Set('Technology_Dependency')
-
-
-class Technology_Dependency(db.Entity):
-    system = Required(System)
-    technology = Required(Technology)
-    weight = Required(int, default=1)
-    PrimaryKey(system, technology)
-
-
-class Technology_Skill(db.Entity):
-    technology = Required(Technology)
-    person = Required(Person)
-    level = Required(int, default=1)
-    PrimaryKey(technology, person)
-
-
-class Category_Allocation(db.Entity):
-    category = Required(Category)
-    team = Required(Team)
-    ratio = Required(Decimal, precision=3, scale=2, default="0.25")
-    PrimaryKey(category, team)
-
+class Domain(Base):
+    """Domain."""
+    ___tablename__ = 'domains'
+    id = Column(Integer, primary_key=True)
+    bat = Column(String(30), unique=True, index=True)
+    name = Column(String(120), unique=True)
+    display = Column(String(220))
+    note = Column(Text(520))
+    extra = Column(JSON)
+    organization_id = Column(Integer, ForeignKey='organization.id')
+    #teams = relationship('Team', backref='domain')
+    #systems = Set('System')
+    #organization = Required(Organization)
