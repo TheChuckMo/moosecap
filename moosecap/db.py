@@ -4,7 +4,6 @@ from flask import g, current_app
 from flask.cli import with_appcontext
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import Session
-from .config import cfg
 
 
 def init_app(app):
