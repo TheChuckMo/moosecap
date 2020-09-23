@@ -11,7 +11,7 @@ def create_app():
         SECRET_KEY='NOT-A-SECRET-KEY',
         database={'url': 'sqlite:///moosecap.db'}
     )
-    app.config.from_object(cfg.obj)
+    app.config.update(cfg.obj)
 
     db.init_app(app)
 

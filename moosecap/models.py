@@ -35,7 +35,7 @@ class Team(Base):
     display = Column(String(220))
     note = Column(Text(520))
     extra = Column(JSON)
-    organization_id = Column(Integer, ForeignKey='organization.id')
+    # organization_id = Column(Integer, ForeignKey='organization.id')
     #domains = Set('Domain')
     #systems = Set('System')
     #categories = Set('Category_Allocation')
@@ -55,7 +55,7 @@ class Category(Base):
     display = Column(String(220))
     note = Column(Text(520))
     extra = Column(JSON)
-    organization_id = Column(Integer, ForeignKey='organization.id')
+    #organization_id = Column(Integer, ForeignKey='organization.id')
     #teams = Set('Category_Allocation')
 
     def __repr__(self):
@@ -73,7 +73,7 @@ class Person(Base):
     work_unit_ratio = Column(Numeric(precision=3, scale=2))
     note = Column(Text(520))
     extra = Column(JSON)
-    organization_id = Column(Integer, ForeignKey='organization.id')
+    #organization_id = Column(Integer, ForeignKey='organization.id')
     #manage = Column('Team', reverse='manager')
     #team = Column('Team', reverse='members')
     #technology_skills = Set('Technology_Skill')
@@ -84,14 +84,14 @@ class Person(Base):
 
 class Domain(Base):
     """Domain."""
-    ___tablename__ = 'domains'
+    __tablename__ = 'domains'
     id = Column(Integer, primary_key=True)
     bat = Column(String(30), unique=True, index=True)
     name = Column(String(120), unique=True)
     display = Column(String(220))
     note = Column(Text(520))
     extra = Column(JSON)
-    organization_id = Column(Integer, ForeignKey='organization.id')
+    #organization_id = Column(Integer, ForeignKey='organization.id')
     #teams = relationship('Team', backref='domain')
     #systems = Set('System')
     #organization = Required(Organization)

@@ -3,6 +3,6 @@
 SECRET_KEY: b'THIS-IS-NOT-A-SECRET-KEY'
 database:
   # dialect+driver://username:password@host:port/database
-  url: 'sqlite:///moosecap.db'
-  encoding: 'utf-8'
-  echo: true
+  sqlalchemy.url: 'sqlite:///moosecap.db'
+  sqlalchemy.encoding: 'utf-8'
+  sqlalchemy.echo: true
