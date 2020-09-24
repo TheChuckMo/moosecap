@@ -1,6 +1,7 @@
 README.md
 setup.py
 moosecap/__init__.py
+moosecap/__init__.pyc
 moosecap/api.py
 moosecap/console.py
 moosecap/db.py

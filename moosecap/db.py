@@ -20,19 +20,20 @@ def get_engine():
     return g.engine
 
 
-def open_session() -> Session:
+def get_session() -> Session:
     """Prepare SQLAlchemy database session."""
     if 'session' not in g:
-        if 'Session' not in g:
-            g.Session = sessionmaker(bind=get_engine())
-        g.session = g.Session()
+        # if 'Session' not in g:
+        #     g.Session = sessionmaker(bind=get_engine())
+        # g.session = g.Session()
+        g.session = Session(bind=get_engine())
 
     return g.session
 
 
 def close_session(e=None):
     """Close all sessions with database."""
-    session = g.pop('db', None)
+    session = g.pop('session', None)
 
     if session is not None:
         session.close_all()
@@ -49,7 +50,7 @@ def cli_db():
 def cli_db_open():
     """Open a database session."""
     click.echo('open database session.')
-    _session = open_session()
+    _session = get_session()
     click.echo(f'{_session}')
 
 
