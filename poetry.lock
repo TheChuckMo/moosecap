@@ -50,6 +50,29 @@ version = "5.3"
 toml = ["toml"]
 
 [[package]]
+category = "dev"
+description = "Faker is a Python package that generates fake data for you."
+name = "faker"
+optional = false
+python-versions = ">=3.5"
+version = "4.1.3"
+
+[package.dependencies]
+python-dateutil = ">=2.4"
+text-unidecode = "1.3"
+
+[[package]]
+category = "dev"
+description = "Provider for Faker which adds fake microservice names."
+name = "faker-microservice"
+optional = false
+python-versions = "*"
+version = "2.0.0"
+
+[package.dependencies]
+faker = "*"
+
+[[package]]
 category = "main"
 description = "A simple framework for building complex web applications."
 name = "flask"
@@ -363,6 +386,17 @@ pytest = ">=4.6"
 testing = ["fields", "hunter", "process-tests (2.0.2)", "six", "pytest-xdist", "virtualenv"]
 
 [[package]]
+category = "dev"
+description = "Extensions to the standard Python datetime module"
+name = "python-dateutil"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
+version = "2.8.1"
+
+[package.dependencies]
+six = ">=1.5"
+
+[[package]]
 category = "main"
 description = "PyXDG contains implementations of freedesktop.org standards in python."
 name = "pyxdg"
@@ -417,6 +451,14 @@ pymysql = ["pymysql"]
 
 [[package]]
 category = "dev"
+description = "The most basic Text::Unidecode port"
+name = "text-unidecode"
+optional = false
+python-versions = "*"
+version = "1.3"
+
+[[package]]
+category = "dev"
 description = "Python Library for Tom's Obvious, Minimal Language"
 name = "toml"
 optional = false
@@ -456,7 +498,8 @@ dev = ["pytest", "pytest-timeout", "coverage", "tox", "sphinx", "pallets-sphinx-
 watchdog = ["watchdog"]
 
 [metadata]
-content-hash = "93da0d62421a5615e1446c6962cc791bf37a8466a0baa31e1b8c1682ecd0202c"
+content-hash = "308985cd7f3add6ca5b85ed8f8a69fe5162b5b6d2b3c9ad36bae916221beafce"
+lock-version = "1.0"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -511,6 +554,13 @@ coverage = [
     {file = "coverage-5.3-cp39-cp39-win32.whl", hash = "sha256:cb7df71de0af56000115eafd000b867d1261f786b5eebd88a0ca6360cccfaca7"},
     {file = "coverage-5.3-cp39-cp39-win_amd64.whl", hash = "sha256:47a11bdbd8ada9b7ee628596f9d97fbd3851bd9999d398e9436bd67376dbece7"},
     {file = "coverage-5.3.tar.gz", hash = "sha256:280baa8ec489c4f542f8940f9c4c2181f0306a8ee1a54eceba071a449fb870a0"},
+]
+faker = [
+    {file = "Faker-4.1.3-py3-none-any.whl", hash = "sha256:80bab8d46035a7393de827210c5d39c17109d3346d131946bde622137120c496"},
+    {file = "Faker-4.1.3.tar.gz", hash = "sha256:075a95ac4c95765370919d787dcd958acfaea635005ad5af4d926cb0973800db"},
+]
+faker-microservice = [
+    {file = "faker-microservice-2.0.0.tar.gz", hash = "sha256:8cd5cbce5b08f2b33ddc7ad55f048353c87134fd36f50929000b27210c1a7c63"},
 ]
 flask = [
     {file = "Flask-1.1.2-py2.py3-none-any.whl", hash = "sha256:8a4fdd8936eba2512e9c85df320a37e694c93945b33ef33c89946a340a238557"},
@@ -634,6 +684,10 @@ pytest-cov = [
     {file = "pytest-cov-2.10.1.tar.gz", hash = "sha256:47bd0ce14056fdd79f93e1713f88fad7bdcc583dcd7783da86ef2f085a0bb88e"},
     {file = "pytest_cov-2.10.1-py2.py3-none-any.whl", hash = "sha256:45ec2d5182f89a81fc3eb29e3d1ed3113b9e9a873bcddb2a71faaab066110191"},
 ]
+python-dateutil = [
+    {file = "python-dateutil-2.8.1.tar.gz", hash = "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"},
+    {file = "python_dateutil-2.8.1-py2.py3-none-any.whl", hash = "sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a"},
+]
 pyxdg = [
     {file = "pyxdg-0.26-py2.py3-none-any.whl", hash = "sha256:1948ff8e2db02156c0cccd2529b43c0cff56ebaa71f5f021bbd755bc1419190e"},
     {file = "pyxdg-0.26.tar.gz", hash = "sha256:fe2928d3f532ed32b39c32a482b54136fe766d19936afc96c8f00645f9da1a06"},
@@ -711,6 +765,10 @@ sqlalchemy = [
     {file = "SQLAlchemy-1.3.19-cp38-cp38-win32.whl", hash = "sha256:b70bad2f1a5bd3460746c3fb3ab69e4e0eb5f59d977a23f9b66e5bdc74d97b86"},
     {file = "SQLAlchemy-1.3.19-cp38-cp38-win_amd64.whl", hash = "sha256:83469ad15262402b0e0974e612546bc0b05f379b5aa9072ebf66d0f8fef16bea"},
     {file = "SQLAlchemy-1.3.19.tar.gz", hash = "sha256:3bba2e9fbedb0511769780fe1d63007081008c5c2d7d715e91858c94dbaa260e"},
+]
+text-unidecode = [
+    {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
+    {file = "text_unidecode-1.3-py2.py3-none-any.whl", hash = "sha256:1311f10e8b895935241623731c2ba64f4c455287888b18189350b67134a822e8"},
 ]
 toml = [
     {file = "toml-0.10.1-py2.py3-none-any.whl", hash = "sha256:bda89d5935c2eac546d648028b9901107a595863cb36bae0c73ac804a9b4ce88"},

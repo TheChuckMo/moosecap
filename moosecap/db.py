@@ -1,9 +1,9 @@
-from .models import Organization, Team, Category, Person, Domain
+from .models import *
 import click
 from flask import g, current_app
 from flask.cli import with_appcontext
 from sqlalchemy import engine_from_config
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker, scoped_session
 
 
 def init_app(app):
@@ -12,13 +12,22 @@ def init_app(app):
     app.cli.add_command(cli_db)
 
 
+def get_engine():
+    """Get SQLAlchemy engine"""
+    if 'engine' not in g:
+        g.engine = engine_from_config(current_app.config.get("database"))
+
+    return g.engine
+
+
 def open_session() -> Session:
     """Prepare SQLAlchemy database session."""
-    if 'db' not in g:
-        _engine = engine_from_config(current_app.config.get("database"))
-        g.db = Session(bind=_engine)
+    if 'session' not in g:
+        if 'Session' not in g:
+            g.Session = sessionmaker(bind=get_engine())
+        g.session = g.Session()
 
-    return g.db
+    return g.session
 
 
 def close_session(e=None):
@@ -44,9 +53,45 @@ def cli_db_open():
     click.echo(f'{_session}')
 
 
+@cli_db.command('config')
+@with_appcontext
+def cli_db_config():
+    """Create the database."""
+    # click.echo(f'all: {current_app.config}')
+    click.echo(f'database: {current_app.config.get("database")}')
+
+
+@cli_db.command('tables')
+@with_appcontext
+def cli_db_tables():
+    """List database tables."""
+    click.echo('list database tables from metadata.')
+    #_session = open_session()
+    for table in Base.metadata.sorted_tables:
+        click.echo('---')
+        click.echo(f'{table.name}:')
+        click.echo(f'  key: {table.key}')
+        click.echo(f'  primary_key: {table.primary_key}')
+        click.echo(f'  foreign_keys:')
+        for key in table.foreign_keys:
+            click.echo(f'    - foreign_key: {key}')
+
+
 @cli_db.command('create')
 @with_appcontext
 def cli_db_create():
     """Create the database."""
-    print(f'{current_app.config.get("database")}')
-    _session = open_session()
+    # click.echo(f'all: {current_app.config}')
+    click.echo(f'database: {current_app.config.get("database")}')
+    click.echo('creating database tables.')
+    Base.metadata.create_all(bind=get_engine())
+
+
+@cli_db.command('drop')
+@with_appcontext
+def cli_db_drop():
+    """Create the database."""
+    # click.echo(f'all: {current_app.config}')
+    click.echo(f'database: {current_app.config.get("database")}')
+    click.echo('dropping database tables.')
+    Base.metadata.drop_all(bind=get_engine())

@@ -8,7 +8,7 @@ Base = declarative_base()
 class Organization(Base):
     """Organization."""
     __tablename__ = 'organizations'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     bat = Column(String(30), unique=True, index=True)
     name = Column(String(120), unique=True)
     display = Column(String(220))
@@ -29,7 +29,7 @@ class Organization(Base):
 class Team(Base):
     """Team."""
     __tablename__ = 'teams'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     bat = Column(String(30), unique=True, index=True)
     name = Column(String(120), unique=True)
     display = Column(String(220))
@@ -49,7 +49,7 @@ class Team(Base):
 class Category(Base):
     """Category."""
     __tablename__ = 'categories'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     bat = Column(String(30), unique=True, index=True)
     name = Column(String(120), unique=True)
     display = Column(String(220))
@@ -65,7 +65,7 @@ class Category(Base):
 class Person(Base):
     """Person."""
     __tablename__ = 'people'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     bat = Column(String(30), unique=True, index=True)
     name = Column(String(120), unique=True)
     display = Column(String(220))
@@ -85,7 +85,7 @@ class Person(Base):
 class Domain(Base):
     """Domain."""
     __tablename__ = 'domains'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     bat = Column(String(30), unique=True, index=True)
     name = Column(String(120), unique=True)
     display = Column(String(220))
@@ -95,3 +95,6 @@ class Domain(Base):
     #teams = relationship('Team', backref='domain')
     #systems = Set('System')
     #organization = Required(Organization)
+
+    def __repr__(self):
+        return "<id(id='%s', bat='%s', name='%s')>" % (self.id, self.bat, self.name)
